@@ -18,7 +18,7 @@
 <p>It feels like the first time. It is the first time my soul has matched so well with another, and you bring so much hope and light.</p>
 <p>I love you. I crave you like the ocean reaches for the full moon, in a poetic way where you show light in the dark places I thought would never light up.</p>
 <p>Happy second to us, the second of many to come.</p>
-<div class="voice" id="voice-message"><span class="voice-icon" aria-hidden="true">♫</span><div style="flex:1;min-width:0"><p id="voice-title"><strong>The letter, in my voice</strong></p><audio id="voice-audio" controls preload="metadata" aria-labelledby="voice-title" style="display:block;width:100%;margin-top:12px"><source src="assets/anniversary-message.m4a.m4a" type="audio/mp4">Your browser does not support the audio player.</audio><p style="margin-top:10px"><label><input id="music-enabled" type="checkbox" checked> Soft background music</label></p><p id="music-status" role="status"></p><audio id="background-audio" preload="metadata" src="assets/anniversary-background.mp3" hidden></audio><p style="margin-top:8px"><a href="assets/anniversary-message.m4a.m4a">Open the recording</a></p></div></div></div></div></section>
+<div class="voice" id="voice-message"><span class="voice-icon" aria-hidden="true">♫</span><div style="flex:1;min-width:0"><p id="voice-title"><strong>The letter, in my voice</strong></p><audio id="voice-audio" controls preload="metadata" aria-labelledby="voice-title" style="display:block;width:100%;margin-top:12px"><source src="anniversary-message.m4a.m4a" type="audio/mp4">Your browser does not support the audio player.</audio><p style="margin-top:10px"><label><input id="music-enabled" type="checkbox" checked> Soft background music</label></p><p id="music-status" role="status"></p><audio id="background-audio" preload="metadata" src="assets/anniversary-background.mp3" hidden></audio><p style="margin-top:8px"><a href="anniversary-message.m4a.m4a">Open the recording</a></p></div></div></div></div></section>
 <section class="chapter photo-section" id="photo"><div class="polaroid"><a href="assets/together-at-the-fountain.jpg" target="_blank" rel="noopener" aria-label="Open our fountain portrait in full size"><img src="assets/together-at-the-fountain.jpg" alt="An AI-composited portrait of us standing together in front of a fountain glowing blue and pink at night." width="1086" height="1448" loading="lazy" style="display:block;width:100%;height:auto"></a><p class="caption">A little glimpse of us, side by side.</p></div><div><span class="number">02 / The picture</span><h2>A little closer,<br>even from here.</h2><p style="color:var(--muted)">One picture of the two of us. A small daydream for now, and something to look forward to.</p><p class="quiet">An imagined moment.</p></div></section>
 <div class="dark"><section class="chapter music-grid" id="music"><div><span class="number">03 / The soundtrack</span><h2>If I could put<br>this feeling on repeat.</h2><p>Two months of us, and the beginning of our third. These songs are a little way of stepping into this next chapter with you, loving you in my mother tongue, one song at a time.</p><a class="button" href="https://music.youtube.com/playlist?list=PLV0WHxf8IK4I&amp;si=y8tcXhFsUSGUCbY0" target="_blank" rel="noopener noreferrer" style="background:var(--paper);color:var(--wine);border-color:var(--paper)">Listen to our playlist <span aria-hidden="true">↗</span></a><p style="font-size:12px;margin-top:12px">Opens in YouTube Music.</p>
 <details>
@@ -64,7 +64,8 @@
   music.playbackRate=voice.playbackRate;
  }
  function volume() {
-  const level=voice.muted?0:0.22*voice.volume;
+  const fade=Number.isFinite(voice.duration)?Math.max(0,Math.min(1,(voice.duration-voice.currentTime)/8)):1;
+  const level=voice.muted?0:0.22*voice.volume*fade;
   if(gain) gain.gain.value=level; else music.volume=level;
  }
  function start() {
@@ -81,6 +82,7 @@
  voice.addEventListener('ratechange',()=>{music.playbackRate=voice.playbackRate;});
  voice.addEventListener('volumechange',volume);
  voice.addEventListener('timeupdate',()=>{
+  volume();
   if(!voice.paused&&!music.paused&&Math.abs(music.currentTime-voice.currentTime)>0.4)sync();
  });
  toggle.addEventListener('change',()=>{if(toggle.checked)start();else{music.pause();status.textContent='';}});
